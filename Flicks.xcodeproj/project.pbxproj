@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		860EA0641E59F34100DCAD58 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860EA0631E59F34100DCAD58 /* ImageUtils.swift */; };
 		862B731A1E57636300B5CEFB /* NetworkUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862B73191E57636300B5CEFB /* NetworkUtil.swift */; };
 		863F38EB1E56070F003CFF40 /* ServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863F38EA1E56070F003CFF40 /* ServiceDelegate.swift */; };
 		863F38EE1E561238003CFF40 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863F38ED1E561238003CFF40 /* MovieTableViewCell.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		860EA0631E59F34100DCAD58 /* ImageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		862B73191E57636300B5CEFB /* NetworkUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkUtil.swift; sourceTree = "<group>"; };
 		863F38EA1E56070F003CFF40 /* ServiceDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceDelegate.swift; sourceTree = "<group>"; };
 		863F38ED1E561238003CFF40 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				86FFF35C1E55782400F78E67 /* MovieService.swift */,
 				863F38EA1E56070F003CFF40 /* ServiceDelegate.swift */,
 				862B73191E57636300B5CEFB /* NetworkUtil.swift */,
+				860EA0631E59F34100DCAD58 /* ImageUtils.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			files = (
 				86FFF35D1E55782400F78E67 /* MovieService.swift in Sources */,
 				86FFF3471E5574B600F78E67 /* AppDelegate.swift in Sources */,
+				860EA0641E59F34100DCAD58 /* ImageUtils.swift in Sources */,
 				863F38EE1E561238003CFF40 /* MovieTableViewCell.swift in Sources */,
 				86FFF3601E55786C00F78E67 /* Movie.swift in Sources */,
 				862B731A1E57636300B5CEFB /* NetworkUtil.swift in Sources */,

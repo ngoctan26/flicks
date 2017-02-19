@@ -16,14 +16,16 @@ class MovieDetailViewController: UIViewController {
     
     
     // Properties
-    var movieImageUrl = ""
+    var movieImageHighUrl = ""
+    var movieImageLowUrl = ""
     var overviewInfo = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        movieDetailImage.setImageWith(URL(string: movieImageUrl)!)
+        //movieDetailImage.setImageWith(URL(string: movieImageUrl)!)
+        ImageUtils.loadImageFromLowToHighResolotion(imageView: movieDetailImage, highUrl: movieImageHighUrl, lowUrl: movieImageLowUrl)
         overViewInfoLabel.layer.cornerRadius = 5
         overViewInfoLabel.text = overviewInfo
         overViewInfoLabel.sizeToFit()

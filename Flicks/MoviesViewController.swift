@@ -56,7 +56,8 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             if let imageUrlAsStr = ((movies[indexPath.row]))["poster_path"] {
                 let imageUrlFullPath = MovieService.POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
-                cell.movieImage.setImageWith(URL(string: imageUrlFullPath)!)
+                //cell.movieImage.setImageWith(URL(string: imageUrlFullPath)!)
+                ImageUtils.loadImageFromUrlWithAnimate(imageView: cell.movieImage, url: imageUrlFullPath)
             } else {
                 cell.movieImage = nil
             }
@@ -78,8 +79,10 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let destinationVC = segue.destination as? MovieDetailViewController
             if let destinationVC = destinationVC {
                 if let imageUrlAsStr = ((movies[selectedIndext]))["poster_path"] {
-                    let imageUrlFullPath = MovieService.ORIGINAL_POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
-                    destinationVC.movieImageUrl = imageUrlFullPath
+                    let imageHighUrlFullPath = MovieService.ORIGINAL_POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
+                    let imageLowUrlFullPath = MovieService.POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
+                    destinationVC.movieImageHighUrl = imageHighUrlFullPath
+                    destinationVC.movieImageLowUrl = imageLowUrlFullPath
                 }
                 if let overviewInfo = ((movies[selectedIndext]))["overview"] {
                     destinationVC.overviewInfo = (overviewInfo as? String)!
