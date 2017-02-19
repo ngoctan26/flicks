@@ -42,6 +42,11 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieTableViewCell
+        // Set custom selected view
+//        cell.selectionStyle = .none
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.lightGray
+        cell.selectedBackgroundView = backgroundView
         if movies.count > 0 {
             if let titleStr = ((movies[indexPath.row]))["title"] {
                 cell.movieNameLabel.text = (titleStr as! String)
@@ -77,7 +82,6 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     destinationVC.movieImageUrl = imageUrlFullPath
                 }
                 if let overviewInfo = ((movies[selectedIndext]))["overview"] {
-                    print("overview: \(overviewInfo)")
                     destinationVC.overviewInfo = (overviewInfo as? String)!
                 }
             }
@@ -107,7 +111,7 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 movieService.getTopRateMoviews(seviceDelegate: self)
             }
         } else {
-            setView(view: networkErrorLabel, hidden: true)
+            setView(view: networkErrorLabel, hidden: false)
         }
     }
     
