@@ -29,6 +29,9 @@ class MovieDetailViewController: UIViewController {
         overViewInfoLabel.layer.cornerRadius = 5
         overViewInfoLabel.text = overviewInfo
         overViewInfoLabel.sizeToFit()
+//        let overViewLabelHeight = self.view.bounds.size.height - overViewInfoLabel.frame.size.height
+//        let tabBarHeight = self.tabBarController?.tabBar.frame.height
+//        overViewInfoLabel.frame = CGRect(x: 0, y: (tabBarHeight! + overViewLabelHeight), width: overViewInfoLabel.frame.size.width, height: overViewInfoLabel.frame.size.height)
     }
 
     override func didReceiveMemoryWarning() {

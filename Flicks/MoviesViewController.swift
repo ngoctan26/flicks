@@ -114,6 +114,8 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 movieService.getTopRateMoviews(seviceDelegate: self)
             }
         } else {
+            // Stop refreshing progress bar when network is not available
+            refreshController.endRefreshing()
             setView(view: networkErrorLabel, hidden: false)
         }
     }
