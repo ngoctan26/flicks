@@ -16,12 +16,16 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var movieTableView: UITableView!
     var refreshController = UIRefreshControl()
     @IBOutlet weak var networkErrorLabel: UILabel!
+    @IBOutlet weak var movieSearchBar: UISearchBar!
+    
     
     // Properties
+    let searchController = UISearchController(searchResultsController: nil)
     var movieService = MovieService()
     var movies = [NSDictionary]()
-    var selectedIndext = 0
+    var selectedIndex = 0
     var isNowPlayingTab = true
+    var filterMovies = [NSDictionary]()
     
 
     override func viewDidLoad() {
@@ -37,6 +41,9 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filterMovies.count
+        }
         return movies.count
     }
     
@@ -48,13 +55,19 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         backgroundView.backgroundColor = UIColor.lightGray
         cell.selectedBackgroundView = backgroundView
         if movies.count > 0 {
-            if let titleStr = ((movies[indexPath.row]))["title"] {
+            let handleMovie: NSDictionary
+            if searchController.isActive && searchController.searchBar.text != "" {
+                handleMovie = filterMovies[indexPath.row]
+            } else {
+                handleMovie = movies[indexPath.row]
+            }
+            if let titleStr = ((handleMovie))["title"] {
                 cell.movieNameLabel.text = (titleStr as! String)
             }
-            if let overViewStr = ((movies[indexPath.row]))["overview"] {
+            if let overViewStr = ((handleMovie))["overview"] {
                 cell.movieOverView.text = (overViewStr as! String)
             }
-            if let imageUrlAsStr = ((movies[indexPath.row]))["poster_path"] {
+            if let imageUrlAsStr = ((handleMovie))["poster_path"] {
                 let imageUrlFullPath = MovieService.POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
                 //cell.movieImage.setImageWith(URL(string: imageUrlFullPath)!)
                 ImageUtils.loadImageFromUrlWithAnimate(imageView: cell.movieImage, url: imageUrlFullPath)
@@ -67,7 +80,7 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndext = indexPath.row
+        selectedIndex = indexPath.row
         performSegue(withIdentifier: "showDetail", sender: self)
     }
     
@@ -78,13 +91,20 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if segue.identifier == "showDetail" {
             let destinationVC = segue.destination as? MovieDetailViewController
             if let destinationVC = destinationVC {
-                if let imageUrlAsStr = ((movies[selectedIndext]))["poster_path"] {
+                let handleMovie: NSDictionary
+                if searchController.isActive && searchController.searchBar.text != "" {
+                    handleMovie = filterMovies[selectedIndex]
+                } else {
+                    handleMovie = movies[selectedIndex]
+                }
+
+                if let imageUrlAsStr = handleMovie["poster_path"] {
                     let imageHighUrlFullPath = MovieService.ORIGINAL_POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
                     let imageLowUrlFullPath = MovieService.POSTER_URL_DOMAIN + (imageUrlAsStr as! String)
                     destinationVC.movieImageHighUrl = imageHighUrlFullPath
                     destinationVC.movieImageLowUrl = imageLowUrlFullPath
                 }
-                if let overviewInfo = ((movies[selectedIndext]))["overview"] {
+                if let overviewInfo = handleMovie["overview"] {
                     destinationVC.overviewInfo = (overviewInfo as? String)!
                 }
             }
@@ -94,6 +114,12 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func initView() {
         movieTableView.delegate = self
         movieTableView.dataSource = self
+        // handle Search bar
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        movieTableView.tableHeaderView = searchController.searchBar
+        
         refreshController.addTarget(self, action: #selector(refreshAction), for: UIControlEvents.valueChanged)
         movieTableView.addSubview(refreshController)
         setView(view: networkErrorLabel, hidden: NetworkUtil.isConnectedToNetwork())
@@ -126,6 +152,16 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }, completion: { _ in })
     }
     
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filterMovies = movies.filter { movie in
+            
+            let titleStr = (movie["title"] as! String)
+            return titleStr.range(of: searchText) != nil
+        }
+        
+        movieTableView.reloadData()
+    }
+    
     func onLoadError(error: Error?) {
         setView(view: networkErrorLabel, hidden: NetworkUtil.isConnectedToNetwork())
         MBProgressHUD.hide(for: self.view, animated: true)
@@ -147,5 +183,11 @@ class MoviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         MBProgressHUD.hide(for: self.view, animated: true)
+    }
+}
+
+extension MoviesViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
     }
 }
